@@ -1,25 +1,61 @@
-import logo from './logo.svg';
-import './App.css';
+import { createElement, Component } from "react";
+import "./app.css";
+import styles from "./app.module.css";
 
-function App() {
+export function App(props) {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+    <div className={styles.app} style={{ border: "1px solid red" }}>
+      <header onClick={props.handleClick} className="App-header">
+        hello function^ name: {props.user.name}
       </header>
+      {props.children}
     </div>
   );
 }
 
-export default App;
+/**
+ * {
+      type: "div",
+      props: {
+        className: "App",
+        children: {
+          type: "header",
+          props: { className: "App-header", children: "hello function" }
+        }
+      }
+ * }
+ */
+
+export const AppWitoutJSX = () =>
+  createElement(
+    "div",
+    { className: "App" },
+    createElement(
+      "header",
+      { className: "App -header" },
+      "hello function AppWitoutJSX"
+    )
+  );
+
+export class AppClass extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      a: 12,
+    };
+  }
+
+  // state = {
+  //   a: 12,
+  // };
+
+  render() {
+    return (
+      <div className="app">
+        <header onClick={this.props.handleClick} className="App-header">
+          hello class^ name: {this.props.user.name}
+        </header>
+      </div>
+    );
+  }
+}

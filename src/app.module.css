@@ -1,0 +1,8 @@
+.app {
+  border-radius: 10px;
+  background-color: red;
+}
+
+.app header {
+  border: 2px solid blue;
+}

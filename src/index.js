@@ -1,17 +1,19 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom";
+import { App, AppClass, AppWitoutJSX } from "./App";
+
+const user = { name: "test" };
+const handleClick = () => {
+  console.log("click");
+};
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <App user={user} handleClick={handleClick}>
+      <h1>children app</h1>
+    </App>
+    <AppClass user={user} handleClick={handleClick} />
+    <AppWitoutJSX />
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById("root")
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
