@@ -3,10 +3,15 @@ import "./app.css";
 import styles from "./app.module.css";
 
 export function App(props) {
+  // можно делать деструктуризацию
+  const { user, handleClick } = props;
+
+  // инлайн стили/класические и цсс модули
   return (
     <div className={styles.app} style={{ border: "1px solid red" }}>
       <header onClick={props.handleClick} className="App-header">
-        hello function^ name: {props.user.name}
+        hello function
+        <h1>name: {props.user.name}</h1>
       </header>
       {props.children}
     </div>
@@ -14,6 +19,7 @@ export function App(props) {
 }
 
 /**
+ * React element
  * {
       type: "div",
       props: {
@@ -26,6 +32,7 @@ export function App(props) {
  * }
  */
 
+// компонент без jsx
 export const AppWitoutJSX = () =>
   createElement(
     "div",
