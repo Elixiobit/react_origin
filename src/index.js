@@ -1,22 +1,32 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { App, AppClass, AppWitoutJSX } from "./App";
+import { App } from "./App";
+import { AppHooks } from "./app-hooks";
 
-const user = { name: "test" };
+class Test extends React.Component {
+  state = {
+    isVisible: true,
+  };
 
-const handleClick = () => {
-  console.log("click");
-};
+  toggle = () => {
+    this.setState({ isVisible: !this.state.isVisible });
+  };
 
-const list = ["test1", "test2"];
+  render() {
+    const { isVisible } = this.state;
+
+    return (
+      <div>
+        <button onClick={this.toggle}>toggle</button>
+        {isVisible && <App toggle={this.toggle} />}
+      </div>
+    );
+  }
+}
 
 ReactDOM.render(
   <React.StrictMode>
-    <App user={user} handleClick={handleClick} list={list}>
-      <h1>children app</h1>
-    </App>
-    <AppClass user={user} handleClick={handleClick} />
-    <AppWitoutJSX />
+    <AppHooks />
   </React.StrictMode>,
   document.getElementById("root")
 );

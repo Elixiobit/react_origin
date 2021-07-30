@@ -1,66 +1,124 @@
-import { createElement, Component } from "react";
-import "./app.css";
+import { Component, PureComponent } from "react";
+
 import styles from "./app.module.css";
 
-export function App(props) {
-  // можно делать деструктуризацию
-  const { user, handleClick } = props;
-
-  // инлайн стили/класические и цсс модули
-  return (
-    <div className={styles.app} style={{ border: "1px solid red" }}>
-      <header onClick={props.handleClick} className="App-header">
-        hello function
-        <h1>name: {props.user.name}</h1>
-      </header>
-      {props.children}
-    </div>
-  );
-}
-
-/**
- * React element
- * {
-      type: "div",
-      props: {
-        className: "App",
-        children: {
-          type: "header",
-          props: { className: "App-header", children: "hello function" }
-        }
-      }
- * }
- */
-
-// компонент без jsx
-export const AppWitoutJSX = () =>
-  createElement(
-    "div",
-    { className: "App" },
-    createElement(
-      "header",
-      { className: "App -header" },
-      "hello function AppWitoutJSX"
-    )
-  );
-
-export class AppClass extends Component {
+export class App extends PureComponent {
   constructor(props) {
+    console.log("constructor");
     super(props);
+    this.id = null;
     this.state = {
-      a: 12,
+      counter: 0,
+      // someProps: props,
     };
+
+    // this.handClick = this.handClick.bind(this)
   }
 
   // state = {
-  //   a: 12,
+  //   counter: 0,
   // };
 
+  static getDerivedStateFromProps(props, state) {
+    console.log("getDerivedStateFromProps", props, state);
+    // return {
+    //   counter: 10,
+    // };
+    return state;
+  }
+
+  handClick = () => {
+    console.log("click");
+    this.setState(
+      (state) => ({
+        counter: state.counter + 1,
+      }),
+      () => console.log("updated", this.state)
+    );
+    // this.setState((state) => ({
+    //   counter: state.counter + 2,
+    // }));
+    // this.setState((state) => ({
+    //   counter: state.counter + 3,
+    // }));
+    // setTimeout(() => {
+    //   unstable_batchedUpdates(() => {
+    //     this.setState({
+    //       counter: this.state.counter + 1,
+    //     });
+    // this.setState({
+    //   counter: this.state.counter + 2,
+    // });
+    //     this.setState({
+    //       counter: this.state.counter + 3,
+    //     });
+    //   });
+    // }, 0);
+    // setState(updater, [callback])
+    // updater - {counter: 10} / (state) => ({counter: 10})
+  };
+
+  componentDidMount() {
+    console.log("componentDidMount");
+    // для выполнения запросов
+    // для выполнения подписок
+    // для таймеров
+    // для работы с дом
+    // для работы с рефами
+    // можно вызывать setState
+
+    this.id = setInterval(() => {
+      this.handClick();
+    }, 500);
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    console.log("shouldComponentUpdate", nextState, this.state);
+    // if (nextState.counter <= 10) {
+    //   return true;
+    // }
+
+    // return false;
+
+    return true;
+  }
+
+  getSnapshotBeforeUpdate(prevProps, prevState) {
+    console.log("getSnapshotBeforeUpdate", prevProps, prevState);
+    return { id: "test" };
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    console.log("componentDidUpdate", prevProps, prevState, snapshot);
+    // для выполнения запросов
+    // для выполнения подписок
+    // для таймеров
+    // для работы с дом
+    // для работы с рефами
+    // // можно вызывать setState
+    // if (this.props.userID !== prevProps.userID) {
+    //   this.fetchData(this.props.userID);
+    // }
+  }
+
+  componentWillUnmount() {
+    // отписок
+    // очистки таймеров
+    // очистки еффектов
+    console.log("componentWillUnmount");
+    clearInterval(this.id);
+  }
+
   render() {
+    const { counter } = this.state;
+    console.log("render", this);
+
     return (
-      <div className="app">
-        <header onClick={this.props.handleClick} className="App-header">
-          hello class^ name: {this.props.user.name}
+      <div className={styles.app} key={1}>
+        <header className="App-header">
+          <h1>counter: {counter}</h1>
+          <button onClick={this.handClick}>update</button>
+          <button onClick={this.props.toggle}>toggle app</button>
         </header>
       </div>
     );
