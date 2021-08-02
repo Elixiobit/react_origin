@@ -1,40 +1,67 @@
-import { useState, useEffect } from "react"
+import { Grid, makeStyles } from "@material-ui/core"
+import PropTypes from "prop-types"
+import { useState, memo } from "react"
+import { MessageList, ChatList } from "./components"
+
+const useStyles = makeStyles((theme) => {
+  return {
+    root: {
+      flexGrow: 1,
+      background: theme.light.color,
+    },
+  }
+})
 
 export const App = () => {
-  const [messages, setMessages] = useState([])
+  const classes = useStyles()
 
-  const [value, setValue] = useState("")
+  const [list, setList] = useState([
+    { user: "ad" },
+    { user: "c" },
+    { user: "bdd" },
+  ])
 
-  const handleSendMessage = () => {
-    setMessages((state) => [...state, { value, athor: "User" }])
-    setValue("")
+  const sortA = () => {
+    setList((state) => [...state].sort((a, b) => a.user.length - b.user.length))
   }
 
-  useEffect(() => {
-    const lastMessage = messages[messages.length - 1]
-
-    if (lastMessage?.athor === "User") {
-      setTimeout(() => {
-        setMessages((state) => [
-          ...state,
-          { value: "Helloo from bot", athor: "Bot" },
-        ])
-      }, 500)
-    }
-  }, [messages])
+  const sortB = () => {
+    setList((state) => [...state].sort((a, b) => b.user.length - a.user.length))
+  }
 
   return (
-    <div>
-      <ul>
-        {messages.map((message, id) => (
-          <li key={id}>
-            {message.value} = {message.athor}
-          </li>
-        ))}
-      </ul>
+    <>
+      <div className={classes.root}>
+        <Grid container={true} spacing={3}>
+          <Grid item={true} xs={6}>
+            <ChatList />
+          </Grid>
+          <Grid item={true} xs={6}>
+            <MessageList />
+          </Grid>
+        </Grid>
+      </div>
 
-      <input value={value} onChange={(e) => setValue(e.target.value)} />
-      <button onClick={handleSendMessage}>send</button>
-    </div>
+      <button onClick={sortA}>sort a</button>
+      <button onClick={sortB}>sort b</button>
+
+      {list.map((user) => (
+        <User key={user.user} user={user} />
+      ))}
+    </>
   )
+}
+
+const User = memo(({ user }) => {
+  console.log(":render")
+  return <h2 style={{ display: "block" }}>{user.user}</h2>
+})
+
+App.propTypes = {
+  count: PropTypes.number.isRequired,
+  users: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+    }),
+  ).isRequired,
 }

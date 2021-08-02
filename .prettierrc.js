@@ -7,4 +7,4 @@ module.exports = {
   trailingComma: "all",
   // включить круглые скобки вокруг аргумента функции
   arrowParens: "always",
-}
+};
