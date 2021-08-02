@@ -1,126 +1,40 @@
-import { Component, PureComponent } from "react";
+import { useState, useEffect } from "react"
 
-import styles from "./app.module.css";
+export const App = () => {
+  const [messages, setMessages] = useState([])
 
-export class App extends PureComponent {
-  constructor(props) {
-    console.log("constructor");
-    super(props);
-    this.id = null;
-    this.state = {
-      counter: 0,
-      // someProps: props,
-    };
+  const [value, setValue] = useState("")
 
-    // this.handClick = this.handClick.bind(this)
+  const handleSendMessage = () => {
+    setMessages((state) => [...state, { value, athor: "User" }])
+    setValue("")
   }
 
-  // state = {
-  //   counter: 0,
-  // };
+  useEffect(() => {
+    const lastMessage = messages[messages.length - 1]
 
-  static getDerivedStateFromProps(props, state) {
-    console.log("getDerivedStateFromProps", props, state);
-    // return {
-    //   counter: 10,
-    // };
-    return state;
-  }
+    if (lastMessage?.athor === "User") {
+      setTimeout(() => {
+        setMessages((state) => [
+          ...state,
+          { value: "Helloo from bot", athor: "Bot" },
+        ])
+      }, 500)
+    }
+  }, [messages])
 
-  handClick = () => {
-    console.log("click");
-    this.setState(
-      (state) => ({
-        counter: state.counter + 1,
-      }),
-      () => console.log("updated", this.state)
-    );
-    // this.setState((state) => ({
-    //   counter: state.counter + 2,
-    // }));
-    // this.setState((state) => ({
-    //   counter: state.counter + 3,
-    // }));
-    // setTimeout(() => {
-    //   unstable_batchedUpdates(() => {
-    //     this.setState({
-    //       counter: this.state.counter + 1,
-    //     });
-    // this.setState({
-    //   counter: this.state.counter + 2,
-    // });
-    //     this.setState({
-    //       counter: this.state.counter + 3,
-    //     });
-    //   });
-    // }, 0);
-    // setState(updater, [callback])
-    // updater - {counter: 10} / (state) => ({counter: 10})
-  };
+  return (
+    <div>
+      <ul>
+        {messages.map((message, id) => (
+          <li key={id}>
+            {message.value} = {message.athor}
+          </li>
+        ))}
+      </ul>
 
-  componentDidMount() {
-    console.log("componentDidMount");
-    // для выполнения запросов
-    // для выполнения подписок
-    // для таймеров
-    // для работы с дом
-    // для работы с рефами
-    // можно вызывать setState
-
-    this.id = setInterval(() => {
-      this.handClick();
-    }, 500);
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    console.log("shouldComponentUpdate", nextState, this.state);
-    // if (nextState.counter <= 10) {
-    //   return true;
-    // }
-
-    // return false;
-
-    return true;
-  }
-
-  getSnapshotBeforeUpdate(prevProps, prevState) {
-    console.log("getSnapshotBeforeUpdate", prevProps, prevState);
-    return { id: "test" };
-  }
-
-  componentDidUpdate(prevProps, prevState, snapshot) {
-    console.log("componentDidUpdate", prevProps, prevState, snapshot);
-    // для выполнения запросов
-    // для выполнения подписок
-    // для таймеров
-    // для работы с дом
-    // для работы с рефами
-    // // можно вызывать setState
-    // if (this.props.userID !== prevProps.userID) {
-    //   this.fetchData(this.props.userID);
-    // }
-  }
-
-  componentWillUnmount() {
-    // отписок
-    // очистки таймеров
-    // очистки еффектов
-    console.log("componentWillUnmount");
-    clearInterval(this.id);
-  }
-
-  render() {
-    const { counter } = this.state;
-    console.log("render", this);
-
-    return (
-      <div className={styles.app} key={1}>
-        <header className="App-header">
-          <h1>counter: {counter}</h1>
-          <button onClick={this.handClick}>update</button>
-          <button onClick={this.props.toggle}>toggle app</button>
-        </header>
-      </div>
-    );
-  }
+      <input value={value} onChange={(e) => setValue(e.target.value)} />
+      <button onClick={handleSendMessage}>send</button>
+    </div>
+  )
 }
