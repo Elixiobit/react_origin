@@ -1,3 +1,21 @@
+import { List } from "@material-ui/core"
+import { useState } from "react"
+import { Chat } from "./chat"
+
 export const ChatList = () => {
-  return <div>ChatList</div>
+  const [chats] = useState(["room1", "room2", "room3"])
+  const [selectedIndex, setSelectedIndex] = useState(0)
+
+  return (
+    <List component="nav">
+      {chats.map((chat, index) => (
+        <Chat
+          key={chat}
+          title={chat}
+          selected={selectedIndex === index}
+          handleListItemClick={() => setSelectedIndex(index)}
+        />
+      ))}
+    </List>
+  )
 }

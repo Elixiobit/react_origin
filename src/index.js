@@ -1,7 +1,8 @@
 import { ThemeProvider, createTheme } from "@material-ui/core"
 import React from "react"
 import ReactDOM from "react-dom"
-import { App } from "./App"
+import { Layout, Header, ChatList, MessageList } from "./components"
+import "./global.css"
 
 const theme = createTheme({
   dark: {
@@ -15,7 +16,11 @@ const theme = createTheme({
 ReactDOM.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
-      <App count={1} users={[{ id: "string" }]} />
+      <Layout
+        header={<Header />}
+        chats={<ChatList />}
+        messages={<MessageList />}
+      />
     </ThemeProvider>
   </React.StrictMode>,
   document.getElementById("root"),
