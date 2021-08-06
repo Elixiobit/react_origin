@@ -23,14 +23,14 @@ export const MessageList = () => {
 
   const handleSendMessage = () => {
     if (value) {
-      setMessages((state) => [...state, { value, athor: "User" }])
+      setMessages((state) => [...state, { value, author: "User" }])
       setValue("")
     }
   }
 
   const handlePressInput = ({ code }) => {
     if (code === "Enter" && value) {
-      setMessages((state) => [...state, { value, athor: "User" }])
+      setMessages((state) => [...state, { value, author: "User" }])
       setValue("")
     }
   }
@@ -46,11 +46,11 @@ export const MessageList = () => {
 
     handleScrollBottom()
 
-    if (lastMessage?.athor === "User") {
+    if (lastMessage?.author === "User") {
       setTimeout(() => {
         setMessages((state) => [
           ...state,
-          { value: "Helloo from bot", athor: "Bot" },
+          { value: "Helloo from bot", author: "Bot" },
         ])
       }, 500)
     }
