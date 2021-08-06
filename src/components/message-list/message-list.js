@@ -14,16 +14,20 @@ const useStyles = makeStyles(() => {
   }
 })
 
-export const MessageList = () => {
+export const MessageList = ({ messages, value }) => {
   const s = useStyles()
-  const [messages, setMessages] = useState([])
-  const [value, setValue] = useState("")
+  // заменить на провайдер (удаляем)
+  const [m, setMessages] = useState([])
+  const [value2, setValue] = useState("")
+
+  console.log(m, value2)
 
   const ref = useRef()
 
   const handleSendMessage = () => {
     if (value) {
       setMessages((state) => [...state, { value, author: "User" }])
+      // props.handleChengeValue((state) => [...state, { value, author: "User" }])
       setValue("")
     }
   }
@@ -31,6 +35,7 @@ export const MessageList = () => {
   const handlePressInput = ({ code }) => {
     if (code === "Enter" && value) {
       setMessages((state) => [...state, { value, author: "User" }])
+      // props.sendMessage((state) => [...state, { value, author: "User" }])
       setValue("")
     }
   }
@@ -42,6 +47,7 @@ export const MessageList = () => {
   }, [])
 
   useEffect(() => {
+    // перенести в провайдер еффект
     const lastMessage = messages[messages.length - 1]
 
     handleScrollBottom()
@@ -60,7 +66,7 @@ export const MessageList = () => {
     <>
       <div ref={ref}>
         {messages.map((message, id) => (
-          <Message key={id} message={message} />
+          <Message key={id} {...message} />
         ))}
       </div>
 

@@ -1,21 +1,25 @@
 import { List } from "@material-ui/core"
-import { useState } from "react"
+import { Link, useParams } from "react-router-dom"
 import { Chat } from "./chat"
 
-export const ChatList = () => {
-  const [chats] = useState(["room1", "room2", "room3"])
-  const [selectedIndex, setSelectedIndex] = useState(0)
+export const ChatList = ({ conversations, allMessages }) => {
+  const { roomId } = useParams()
 
   return (
     <List component="nav">
-      {chats.map((chat, index) => (
-        <Chat
-          key={chat}
-          title={chat}
-          selected={selectedIndex === index}
-          handleListItemClick={() => setSelectedIndex(index)}
-        />
-      ))}
+      {conversations.map((chat, index) => {
+        const currentMessages = allMessages[chat.title]
+
+        return (
+          <Link key={index} to={`/chat/${chat.title}`}>
+            <Chat
+              title={chat.title}
+              selected={roomId === chat.title}
+              lastMessage={currentMessages[currentMessages.length - 1]}
+            />
+          </Link>
+        )
+      })}
     </List>
   )
 }
