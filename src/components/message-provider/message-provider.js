@@ -22,6 +22,7 @@ export function MessageProvider({ children }) {
       value:
         conversations.find((conversation) => conversation.title === roomId)
           ?.value || "",
+      hasRoomById: Object.keys(messages).some(room => room === roomId)
     }
   }, [conversations, messages, roomId])
 

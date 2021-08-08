@@ -1,5 +1,5 @@
 import { useEffect } from "react"
-import { Switch, Route, useHistory } from "react-router-dom"
+import { Switch, Route, useHistory, Redirect } from "react-router-dom"
 import {
   MessageProvider,
   Layout,
@@ -31,9 +31,11 @@ export function Chat() {
         <MessageProvider>
           {([state]) => (
             <Layout header={<Header />} chats={<ChatList {...state} />}>
-              <Route path="/chat/:roomId">
-                <MessageList {...state} />
-              </Route>
+              {state.hasRoomById ? (
+                <Route path="/chat/:roomId">
+                  <MessageList {...state} />
+                </Route>
+              ): <Redirect to="/chat"/>}
               <Route exact={true} path="/chat">
                 <h1>выберите сообщение</h1>
               </Route>
