@@ -14,18 +14,6 @@ export function MessageProvider({ children }) {
     room2: [],
   })
 
-  const state = useMemo(() => {
-    return {
-      conversations,
-      allMessages: messages,
-      messages: messages[roomId] || [],
-      value:
-        conversations.find((conversation) => conversation.title === roomId)
-          ?.value || "",
-      hasRoomById: Object.keys(messages).some((room) => room === roomId),
-    }
-  }, [conversations, messages, roomId])
-
   const updateConversations = useCallback(
     (value = "") => {
       setConversations((conversations) =>
@@ -38,6 +26,18 @@ export function MessageProvider({ children }) {
     },
     [roomId],
   )
+
+  const state = useMemo(() => {
+    return {
+      conversations,
+      allMessages: messages,
+      messages: messages[roomId] || [],
+      value:
+        conversations.find((conversation) => conversation.title === roomId)
+          ?.value || "",
+      hasRoomById: Object.keys(messages).some((room) => room === roomId),
+    }
+  }, [conversations, messages, roomId])
 
   const actions = useMemo(() => {
     return {
