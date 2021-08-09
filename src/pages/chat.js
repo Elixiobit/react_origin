@@ -29,13 +29,15 @@ export function Chat() {
     <Switch>
       <Route path={["/chat/:roomId", "/chat"]}>
         <MessageProvider>
-          {([state]) => (
+          {([state, actions]) => (
             <Layout header={<Header />} chats={<ChatList {...state} />}>
               {state.hasRoomById ? (
                 <Route path="/chat/:roomId">
-                  <MessageList {...state} />
+                  <MessageList {...state} {...actions}/>
                 </Route>
-              ): <Redirect to="/chat"/>}
+              ) : (
+                <Redirect to="/chat" />
+              )}
               <Route exact={true} path="/chat">
                 <h1>выберите сообщение</h1>
               </Route>

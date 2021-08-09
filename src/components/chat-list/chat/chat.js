@@ -21,7 +21,6 @@ const useStyles = makeStyles(() => {
 })
 
 export function Chat({ title, selected, handleListItemClick, lastMessage }) {
-  console.log(lastMessage)
   const s = useStyles()
 
   return (
@@ -36,10 +35,12 @@ export function Chat({ title, selected, handleListItemClick, lastMessage }) {
       </ListItemIcon>
       <div className={styles.description}>
         <ListItemText className={styles.text} primary={title} />
-        <ListItemText
-          className={styles.text}
-          primary={`${lastMessage.author}: ${lastMessage.message}`}
-        />
+        {lastMessage && (
+          <ListItemText
+            className={styles.text}
+            primary={`${lastMessage.author}: ${lastMessage.message}`}
+          />
+        )}
         <ListItemText className={styles.text} primary="12.30" />
       </div>
     </ListItem>

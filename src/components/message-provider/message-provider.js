@@ -1,17 +1,17 @@
-import { useState, useMemo } from "react"
+import { useState, useMemo, useCallback, useEffect } from "react"
 import { useParams } from "react-router-dom"
 
 export function MessageProvider({ children }) {
   const { roomId } = useParams()
 
-  const [conversations] = useState([
-    { title: "room1", value: "test 1" },
-    { title: "room2", value: "test 2" },
+  const [conversations, setConversations] = useState([
+    { title: "room1", value: "test value 1" },
+    { title: "room2", value: "test value 2" },
   ])
 
-  const [messages] = useState({
-    room1: [{ message: "Привет !", author: "User", date: new Date() }],
-    room2: [{ message: "Привет room2 !", author: "User", date: new Date() }],
+  const [messages, setMessages] = useState({
+    room1: [],
+    room2: [],
   })
 
   const state = useMemo(() => {
@@ -22,24 +22,58 @@ export function MessageProvider({ children }) {
       value:
         conversations.find((conversation) => conversation.title === roomId)
           ?.value || "",
-      hasRoomById: Object.keys(messages).some(room => room === roomId)
+      hasRoomById: Object.keys(messages).some((room) => room === roomId),
     }
   }, [conversations, messages, roomId])
 
+  const updateConversations = useCallback(
+    (value = "") => {
+      setConversations((conversations) =>
+        conversations.map((conversation) => {
+          return conversation.title === roomId
+            ? { ...conversation, value }
+            : conversation
+        }),
+      )
+    },
+    [roomId],
+  )
+
   const actions = useMemo(() => {
     return {
-      // ({ message, author }) =>
-      sendMessage: () => {
-        // нужно в messages - найти сообщение для обновления по roomId
-        // запушить новое сообщение в найденный массив
+      sendMessage: (message) => {
+        const newMessage = { ...message, id: new Date() }
+
+        setMessages((messages) => {
+          return {
+            ...messages,
+            [roomId]: [...(messages[roomId] || []), newMessage],
+          }
+        })
+
+        updateConversations()
       },
-      // (value / event) =>
-      handleChengeValue: () => {
-        // нужно найти conversations по roomId
-        // в найденной комнате обновить value
+      handleChangeValue: (e) => {
+        const { value } = e.target
+
+        updateConversations(value)
       },
     }
-  }, [])
+  }, [roomId, updateConversations])
+
+  useEffect(() => {
+    let timerId = null
+    const lastMessage = messages[roomId][messages[roomId].length - 1]
+
+    if (lastMessage?.author === "User") {
+      timerId = setTimeout(
+        () => actions.sendMessage({ message: `Helloo from bot to room - ${roomId}`, author: "Bot" }),
+        500,
+      )
+    }
+
+    return () => clearInterval(timerId)
+  }, [messages, roomId, actions])
 
   return children([state, actions])
 }

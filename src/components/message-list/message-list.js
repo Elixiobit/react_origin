@@ -1,6 +1,6 @@
 import { Input, InputAdornment, makeStyles } from "@material-ui/core"
 import { Send } from "@material-ui/icons"
-import { useState, useEffect, useRef, useCallback } from "react"
+import { useEffect, useRef, useCallback } from "react"
 import { Message } from "./message"
 import styles from "./message-list.module.css"
 
@@ -14,29 +14,25 @@ const useStyles = makeStyles(() => {
   }
 })
 
-export const MessageList = ({ messages, value }) => {
+export const MessageList = ({
+  messages,
+  value,
+  sendMessage,
+  handleChangeValue,
+}) => {
   const s = useStyles()
-  // заменить на провайдер (удаляем)
-  const [m, setMessages] = useState([])
-  const [value2, setValue] = useState("")
-
-  console.log(m, value2)
 
   const ref = useRef()
 
   const handleSendMessage = () => {
     if (value) {
-      setMessages((state) => [...state, { value, author: "User" }])
-      // props.handleChengeValue((state) => [...state, { value, author: "User" }])
-      setValue("")
+      sendMessage({ author: "User", message: value })
     }
   }
 
   const handlePressInput = ({ code }) => {
-    if (code === "Enter" && value) {
-      setMessages((state) => [...state, { value, author: "User" }])
-      // props.sendMessage((state) => [...state, { value, author: "User" }])
-      setValue("")
+    if (code === "Enter") {
+      handleSendMessage()
     }
   }
 
@@ -44,23 +40,11 @@ export const MessageList = ({ messages, value }) => {
     if (ref.current) {
       ref.current.scrollTo(0, ref.current.scrollHeight)
     }
-  }, [])
+  }, [messages])
 
   useEffect(() => {
-    // перенести в провайдер еффект
-    const lastMessage = messages[messages.length - 1]
-
     handleScrollBottom()
-
-    if (lastMessage?.author === "User") {
-      setTimeout(() => {
-        setMessages((state) => [
-          ...state,
-          { value: "Helloo from bot", author: "Bot" },
-        ])
-      }, 500)
-    }
-  }, [messages, handleScrollBottom])
+  }, [handleScrollBottom])
 
   return (
     <>
@@ -73,7 +57,7 @@ export const MessageList = ({ messages, value }) => {
       <Input
         className={s.input}
         value={value}
-        onChange={(e) => setValue(e.target.value)}
+        onChange={handleChangeValue}
         onKeyPress={handlePressInput}
         fullWidth={true}
         placeholder="Введите сообщение..."
