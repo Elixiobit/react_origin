@@ -33,7 +33,7 @@ export function Chat() {
             <Layout header={<Header />} chats={<ChatList {...state} />}>
               {state.hasRoomById ? (
                 <Route path="/chat/:roomId">
-                  <MessageList {...state} {...actions}/>
+                  <MessageList {...state} {...actions} />
                 </Route>
               ) : (
                 <Redirect to="/chat" />

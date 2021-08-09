@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback, useEffect } from "react"
+import { useState, useMemo, useCallback } from "react"
 import { useParams } from "react-router-dom"
 
 export function MessageProvider({ children }) {
@@ -61,19 +61,19 @@ export function MessageProvider({ children }) {
     }
   }, [roomId, updateConversations])
 
-  useEffect(() => {
-    let timerId = null
-    const lastMessage = messages[roomId][messages[roomId].length - 1]
+  // useEffect(() => {
+  //   let timerId = null
+  //   const lastMessage = messages[roomId][messages[roomId].length - 1]
 
-    if (lastMessage?.author === "User") {
-      timerId = setTimeout(
-        () => actions.sendMessage({ message: `Helloo from bot to room - ${roomId}`, author: "Bot" }),
-        500,
-      )
-    }
+  //   if (lastMessage?.author === "User") {
+  //     timerId = setTimeout(
+  //       () => actions.sendMessage({ message: `Helloo from bot to room - ${roomId}`, author: "Bot" }),
+  //       500,
+  //     )
+  //   }
 
-    return () => clearInterval(timerId)
-  }, [messages, roomId, actions])
+  //   return () => clearInterval(timerId)
+  // }, [messages, roomId, actions])
 
   return children([state, actions])
 }
