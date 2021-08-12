@@ -19,7 +19,7 @@ const themes = {
 }
 
 ReactDOM.render(
-  <React.StrictMode>
+  <>
     <Provider store={store}>
       <BrowserRouter>
         <DefaultThemeProvider themes={themes} initialTheme="light">
@@ -32,6 +32,6 @@ ReactDOM.render(
         </DefaultThemeProvider>
       </BrowserRouter>
     </Provider>
-  </React.StrictMode>,
+  </>,
   document.getElementById("root"),
 )
