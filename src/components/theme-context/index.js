@@ -3,10 +3,14 @@ import { useCallback, createContext, useState } from "react"
 
 export const ThemeContext = createContext()
 
-export const DefaultThemeProvider = ({ children, themes, initialTheme }) => {
+export const DefaultThemeProvider = ({
+  children,
+  themes,
+  initialTheme = "light",
+}) => {
   const [theme, setTheme] = useState({
     theme: themes[initialTheme],
-    name: "dark",
+    name: initialTheme,
   })
 
   const changeTheme = useCallback(
