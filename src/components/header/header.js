@@ -11,8 +11,6 @@ export function Header() {
 
   return (
     <div className={styles.header}>
-      <h1 style={{ color: theme.theme.color }}>Header {theme.name}</h1>
-
       <Menu />
 
       <Grid style={{ color: theme.theme.color }} item={true}>
