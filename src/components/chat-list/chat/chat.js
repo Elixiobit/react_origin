@@ -27,7 +27,6 @@ function ChatView({ title, selected, handleListItemClick }) {
   const s = useStyles()
 
   const messages = useSelector((state) => {
-    console.log("update")
     return state.messages.messages[title]
   })
 

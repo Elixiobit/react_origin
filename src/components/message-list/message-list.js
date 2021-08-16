@@ -3,11 +3,8 @@ import { Send } from "@material-ui/icons"
 import { useEffect, useRef, useCallback } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { useParams } from "react-router-dom"
-import {
-  handleChangeMessageValue,
-  clearMessageValue,
-} from "../../store/conversations"
-import { sendMessage } from "../../store/messages"
+import { handleChangeMessageValue } from "../../store/conversations"
+import { sendMessageWithThunk } from "../../store/messages"
 import { Message } from "./message"
 import styles from "./message-list.module.css"
 
@@ -28,11 +25,9 @@ export const MessageList = () => {
   const dispatch = useDispatch()
 
   const messages = useSelector((state) => {
-    console.log("update")
     return state.messages.messages[roomId] || []
   })
   const value = useSelector((state) => {
-    console.log("update")
     return (
       state.conversations.conversations.find(
         (conversation) => conversation.title === roomId,
@@ -44,8 +39,7 @@ export const MessageList = () => {
 
   const handleSendMessage = () => {
     if (value) {
-      dispatch(sendMessage({ author: "User", message: value }, roomId))
-      dispatch(clearMessageValue(roomId))
+      dispatch(sendMessageWithThunk({ author: "User", message: value }, roomId))
     }
   }
 

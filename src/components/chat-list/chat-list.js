@@ -5,7 +5,6 @@ import { useParams } from "react-router-dom"
 import { Chat } from "./chat"
 
 const selector = (state) => {
-  console.log("update conversations")
   return state.conversations.conversations
 }
 
