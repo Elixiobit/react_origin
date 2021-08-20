@@ -1,6 +1,6 @@
 import { clearMessageValue } from "../conversations"
-
-import { sendMessage } from "./actions"
+import { UPDATED_MESSAGES } from "../types"
+import { sendMessage, editMessage } from "./actions"
 
 export const sendMessageWithThunk = (message, roomId) => (dispatch) => {
   // запросы на сервер
@@ -21,3 +21,10 @@ export const sendMessageWithThunk = (message, roomId) => (dispatch) => {
     )
   }
 }
+
+export const editMessageThunk =
+  (messageValue, roomId, updateMessageId) => (dispatch) => {
+    dispatch(editMessage(messageValue, roomId, updateMessageId))
+    dispatch({ type: UPDATED_MESSAGES })
+    dispatch(clearMessageValue(roomId))
+  }

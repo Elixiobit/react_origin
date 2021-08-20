@@ -1,9 +1,16 @@
-import { HANDLE_CHANGE_MESSAGE_VALUE, CLEAR_MESSAGE_VALUE } from "./types"
+import { REMOVE_CONVERSATION, UPDATED_MESSAGES } from "../types"
+import {
+  HANDLE_CHANGE_MESSAGE_VALUE,
+  CLEAR_MESSAGE_VALUE,
+  SET_MESSAGE_VALUE,
+  CREATE_CONVERSATION,
+} from "./types"
 
 const initialState = {
+  updateMessageId: false,
   conversations: [
-    { title: "room1", value: "test value 1" },
-    { title: "room2", value: "test value 2" },
+    { title: "room1", value: "" },
+    { title: "room2", value: "" },
   ],
 }
 
@@ -29,6 +36,36 @@ export const conversationsReducer = (state = initialState, action) => {
       return {
         ...state,
         conversations: updateConversations(state, action.payload, ""),
+      }
+    case REMOVE_CONVERSATION:
+      return {
+        ...state,
+        conversations: state.conversations.filter(
+          (conversation) => conversation.title !== action.payload,
+        ),
+      }
+    case SET_MESSAGE_VALUE:
+      return {
+        ...state,
+        updateMessageId: action.payload.message.id,
+        conversations: state.conversations.map((conversation) =>
+          conversation.title === action.payload.roomId
+            ? { ...conversation, value: action.payload.message.message }
+            : conversation,
+        ),
+      }
+    case UPDATED_MESSAGES:
+      return {
+        ...state,
+        updateMessageId: null,
+      }
+    case CREATE_CONVERSATION:
+      return {
+        ...state,
+        conversations: [
+          ...state.conversations,
+          { title: action.payload, value: "" },
+        ],
       }
     default:
       return state

@@ -4,10 +4,12 @@ import {
   ListItemText,
   makeStyles,
 } from "@material-ui/core"
-import { AccountCircle } from "@material-ui/icons"
+import { AccountCircle, HighlightOff } from "@material-ui/icons"
+import classnames from "classnames"
 import { memo } from "react"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { Link } from "react-router-dom"
+import { removeConversationById } from "../../../store/conversations"
 import styles from "./chat.module.css"
 
 const useStyles = makeStyles(() => {
@@ -27,15 +29,17 @@ function ChatView({ title, selected, handleListItemClick }) {
   const s = useStyles()
 
   const messages = useSelector((state) => {
-    return state.messages.messages[title]
+    return state.messages.messages[title] || []
   })
+
+  const dispatch = useDispatch()
 
   const lastMessage = messages[messages.length - 1]
 
   return (
     <Link to={`/chat/${title}`}>
       <ListItem
-        className={s.item}
+        className={classnames(s.item, styles.item)}
         button={true}
         selected={selected}
         onClick={handleListItemClick}
@@ -53,6 +57,10 @@ function ChatView({ title, selected, handleListItemClick }) {
           )}
           <ListItemText className={styles.text} primary="12.30" />
         </div>
+        <HighlightOff
+          className={styles.removeIcon}
+          onClick={() => dispatch(removeConversationById(title))}
+        />
       </ListItem>
     </Link>
   )

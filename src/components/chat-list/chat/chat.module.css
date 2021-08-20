@@ -14,3 +14,15 @@
 .description .text:last-child {
   text-align: right;
 }
+
+.removeIcon {
+  color: #bdbbbb;
+  display: none;
+}
+
+.item:hover .removeIcon {
+  display: block;
+}
+.item .removeIcon {
+  display: none;
+}
