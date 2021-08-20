@@ -7,6 +7,7 @@ const menu = [
   { to: "/", name: "Главная" },
   { to: "/chat", name: "Чат" },
   { to: "/profile", name: "Профиль" },
+  { to: "/gists", name: "Gist" },
 ]
 
 export function Menu() {
