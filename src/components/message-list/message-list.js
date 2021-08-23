@@ -1,9 +1,11 @@
 import { Input, InputAdornment, makeStyles } from "@material-ui/core"
 import { Send } from "@material-ui/icons"
+import debounce from "lodash.debounce"
 import { useEffect, useRef, useCallback } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { useParams } from "react-router-dom"
-import { handleChangeMessageValue } from "../../store/conversations"
+
+import { handleChangeMessageValueThunk } from "../../store/conversations"
 import { sendMessageWithThunk, editMessageThunk } from "../../store/messages"
 import { Message } from "./message"
 import styles from "./message-list.module.css"
@@ -59,6 +61,11 @@ export const MessageList = () => {
     }
   }
 
+  const onChange = (e) => {
+    const d = dispatch(handleChangeMessageValueThunk(e.target.value, roomId))
+    console.log("ddd", d)
+  }
+
   const handleScrollBottom = useCallback(() => {
     if (ref.current) {
       ref.current.scrollTo(0, ref.current.scrollHeight)
@@ -80,9 +87,7 @@ export const MessageList = () => {
       <Input
         className={s.input}
         value={value}
-        onChange={(e) => {
-          dispatch(handleChangeMessageValue(e.target.value, roomId))
-        }}
+        onChange={onChange}
         onKeyPress={handlePressInput}
         fullWidth={true}
         placeholder="Введите сообщение..."

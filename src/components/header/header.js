@@ -1,13 +1,18 @@
 import { Grid, Switch } from "@material-ui/core"
 import { useContext } from "react"
+import { firebaseApp } from "../../api/firebase"
 import { ThemeContext } from "../theme-context"
 import styles from "./header.module.css"
 import { Menu } from "./menu"
 
-export function Header() {
+export function Header({ session }) {
   const { theme, changeTheme } = useContext(ThemeContext)
 
   const isLightTheme = theme.name === "light"
+
+  const signOut = () => {
+    firebaseApp.auth().signOut()
+  }
 
   return (
     <div className={styles.header}>
@@ -26,6 +31,15 @@ export function Header() {
       <Grid style={{ color: theme.theme.color }} item={true}>
         light
       </Grid>
+      <hr />
+      {session?.email && (
+        <Grid
+          style={{ color: theme.theme.color, cursor: "pointer" }}
+          onClick={signOut}
+        >
+          Выход ({session.email})
+        </Grid>
+      )}
     </div>
   )
 }

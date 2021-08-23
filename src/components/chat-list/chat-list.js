@@ -1,7 +1,8 @@
 import { List, Button } from "@material-ui/core"
-import { memo, useState } from "react"
-import { useSelector } from "react-redux"
+import { memo, useState, useEffect } from "react"
+import { useDispatch, useSelector } from "react-redux"
 import { useParams } from "react-router-dom"
+import { subscribeToConversations } from "../../store/conversations"
 import { AddContactModal } from "../add-contact-modal"
 import { Chat } from "./chat"
 
@@ -13,6 +14,12 @@ export const ChatList = memo(() => {
   const { roomId } = useParams()
   const conversations = useSelector(selector)
   const [isOpen, setModal] = useState(false)
+
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(subscribeToConversations())
+  }, [dispatch])
 
   return (
     <>

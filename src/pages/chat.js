@@ -1,9 +1,13 @@
 import { useEffect } from "react"
+import { useDispatch } from "react-redux"
 import { Switch, Route, useHistory } from "react-router-dom"
 import { Layout, ChatList, MessageList } from "../components"
+import { subscribeToMessages } from "../store/messages"
 
 export function Chat() {
   const { push } = useHistory()
+
+  const dispatch = useDispatch()
 
   useEffect(() => {
     const listenExistChat = ({ code }) => {
@@ -18,6 +22,10 @@ export function Chat() {
       document.removeEventListener("keydown", listenExistChat)
     }
   }, [push])
+
+  useEffect(() => {
+    dispatch(subscribeToMessages())
+  }, [dispatch])
 
   return (
     <Switch>

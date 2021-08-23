@@ -1,12 +1,9 @@
 import { nanoid } from "nanoid"
 import { REMOVE_CONVERSATION } from "../types"
-import { SEND_MESSAGE, EDIT_MESSAGE } from "./types"
+import { SEND_MESSAGE, EDIT_MESSAGE, SUBSCRIBE_MESSAGES } from "./types"
 
 const initialState = {
-  messages: {
-    room1: [{ id: nanoid(), author: "Bot", message: "Hello fron store 1" }],
-    room2: [{ id: nanoid(), author: "Bot", message: "Hello fron store 2" }],
-  },
+  messages: {},
 }
 
 export const messagesReducer = (state = initialState, action) => {
@@ -47,6 +44,11 @@ export const messagesReducer = (state = initialState, action) => {
                 : message,
           ),
         },
+      }
+    case SUBSCRIBE_MESSAGES:
+      return {
+        ...state,
+        messages: action.payload,
       }
     default:
       return state

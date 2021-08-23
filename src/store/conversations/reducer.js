@@ -4,14 +4,12 @@ import {
   CLEAR_MESSAGE_VALUE,
   SET_MESSAGE_VALUE,
   CREATE_CONVERSATION,
+  SUBSCRIBE_CONVERSATIONS,
 } from "./types"
 
 const initialState = {
   updateMessageId: false,
-  conversations: [
-    { title: "room1", value: "" },
-    { title: "room2", value: "" },
-  ],
+  conversations: [],
 }
 
 const updateConversations = (state, roomId, value) =>
@@ -66,6 +64,11 @@ export const conversationsReducer = (state = initialState, action) => {
           ...state.conversations,
           { title: action.payload, value: "" },
         ],
+      }
+    case SUBSCRIBE_CONVERSATIONS:
+      return {
+        ...state,
+        conversations: action.payload,
       }
     default:
       return state
