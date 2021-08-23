@@ -1,6 +1,9 @@
 import { useEffect } from "react"
+import { useDispatch } from "react-redux"
 import { Switch, Route, useHistory } from "react-router-dom"
 import { Layout, ChatList, MessageList } from "../components"
+import { getConversationsFB } from "../store/conversations"
+import { getMessagesFB } from "../store/messages"
 
 export function Chat() {
   const { push } = useHistory()
@@ -18,6 +21,13 @@ export function Chat() {
       document.removeEventListener("keydown", listenExistChat)
     }
   }, [push])
+
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(getConversationsFB())
+    dispatch(getMessagesFB())
+  }, [dispatch])
 
   return (
     <Switch>

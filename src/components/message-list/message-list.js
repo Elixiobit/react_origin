@@ -3,7 +3,7 @@ import { Send } from "@material-ui/icons"
 import { useEffect, useRef, useCallback } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { useParams } from "react-router-dom"
-import { handleChangeMessageValue } from "../../store/conversations"
+import { handleChangeMessageValueFB } from "../../store/conversations"
 import { sendMessageWithThunk, editMessageThunk } from "../../store/messages"
 import { Message } from "./message"
 import styles from "./message-list.module.css"
@@ -81,7 +81,7 @@ export const MessageList = () => {
         className={s.input}
         value={value}
         onChange={(e) => {
-          dispatch(handleChangeMessageValue(e.target.value, roomId))
+          dispatch(handleChangeMessageValueFB(e.target.value, roomId))
         }}
         onKeyPress={handlePressInput}
         fullWidth={true}

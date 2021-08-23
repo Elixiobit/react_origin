@@ -8,6 +8,8 @@ const menu = [
   { to: "/chat", name: "Чат" },
   { to: "/profile", name: "Профиль" },
   { to: "/gists", name: "Gist" },
+  { to: "/login", name: "Логин" },
+  { to: "/sign-up", name: "Регистрация" },
 ]
 
 export function Menu() {

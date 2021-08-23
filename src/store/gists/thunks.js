@@ -21,14 +21,16 @@ export const getGists = (page = 1) => {
   }
 }
 
-export const searchGistsByUserName = (name) => {
+export const searchGistsByUserName = (name, isCurrentQuery) => {
   return async (dispatch, _, api) => {
     try {
       dispatch(searchGistsStart())
 
       const { data } = await api.searchGistsByUserNameApi(name)
 
-      dispatch(searchGistsSuccess(data))
+      if (isCurrentQuery) {
+        dispatch(searchGistsSuccess(data))
+      }
     } catch (e) {
       dispatch(searchGistsError(e))
     }

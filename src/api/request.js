@@ -1,10 +1,13 @@
 import axios from "axios"
+import { withLogger } from "./logger"
 
 class Request {
   constructor(token) {
-    this.request = axios.create({
-      baseURL: "https://api.github.com",
-    })
+    this.request = withLogger(
+      axios.create({
+        baseURL: "https://api.github.com",
+      }),
+    )
     this.token = token
   }
 

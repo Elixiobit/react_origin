@@ -1,40 +1,10 @@
-import { useEffect, useState } from "react"
+import debounce from "lodash.debounce"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { getGists, searchGistsByUserName } from "../store/gists"
 
-// const API_URL_PUBLIC = (page) =>
-//   `https://api.github.com/gists/public?page=${page}`
-
-// const useGists = () => {
-//   const [gists, setGists] = useState([])
-//   const [pending, setPending] = useState(false)
-//   const [error, setError] = useState(null)
-
-//   const getGists = async (page = 1) => {
-//     try {
-//       setPending(true)
-
-//       const response = await fetch(API_URL_PUBLIC(page))
-
-//       const result = await response.json()
-
-//       setGists(result)
-//     } catch (e) {
-//       setError(e)
-//     } finally {
-//       setPending(false)
-//     }
-//   }
-
-//   useEffect(() => {
-//     getGists()
-//   }, [])
-
-//   return { gists, pending, error, getGists }
-// }
-
 export function Gist() {
-  // const { gists, pending, error, getGists } = useGists()
+  const ref = useRef()
   const { gistsPending, gists, gistsError } = useSelector(
     (state) => state.gists,
   )
@@ -42,6 +12,14 @@ export function Gist() {
   const [search, setSearch] = useState("")
 
   const dispatch = useDispatch()
+
+  const searchGistDebounced = useMemo(() => {
+    return debounce((query) => {
+      const isCurrentQuery = query === ref.current
+
+      dispatch(searchGistsByUserName(query, isCurrentQuery))
+    }, 300)
+  }, [dispatch])
 
   useEffect(() => {
     if (!gists.length) {
@@ -51,9 +29,11 @@ export function Gist() {
 
   useEffect(() => {
     if (search) {
-      dispatch(searchGistsByUserName(search))
+      searchGistDebounced(search, dispatch)
     }
-  }, [search, dispatch])
+
+    ref.current = search
+  }, [search, dispatch, searchGistDebounced])
 
   if (gistsError) {
     return <h1>oooppss...</h1>
