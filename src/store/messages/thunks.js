@@ -1,20 +1,18 @@
-import { nanoid } from "nanoid"
-import { db } from "../../api/firebase"
 import { clearMessageValue } from "../conversations"
 import { UPDATED_MESSAGES } from "../types"
 import { sendMessage, editMessage } from "./actions"
 import { GET_MESSAGES } from "./types"
 
 export const sendMessageWithThunk =
-  ({ author, message }, roomId) =>
-  (dispatch) => {
+  (message, roomId) =>
+  async (dispatch, _, { sendMessageApi }) => {
     // запросы на сервер
     // все сайд еффекты
 
     // @TODO сделать проверку на ошибку START/SUCCESS/ERROR статусы
-    db.ref("messages").child(roomId).push({ id: nanoid(), author, message })
+    await sendMessageApi(message, roomId)
 
-    dispatch(sendMessage({ author, message }, roomId))
+    dispatch(sendMessage(message, roomId))
     dispatch(clearMessageValue(roomId))
 
     // if (message.author === "User") {
@@ -38,10 +36,10 @@ export const editMessageThunk =
     dispatch(clearMessageValue(roomId))
   }
 
-export const getMessagesFB = () => (dispatch) => {
-  db.ref("messages")
-    .get()
-    .then((snapshot) => {
+export const getMessagesFB =
+  () =>
+  (dispatch, _, { getMessaagesApi }) => {
+    getMessaagesApi().then((snapshot) => {
       const messages = {}
 
       snapshot.forEach((snap) => {
@@ -50,4 +48,4 @@ export const getMessagesFB = () => (dispatch) => {
 
       dispatch({ type: GET_MESSAGES, payload: messages })
     })
-}
+  }
