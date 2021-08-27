@@ -19,6 +19,7 @@ module.exports = {
     "react/prop-types": "off",
     "react/react-in-jsx-scope": "off",
     "no-unused-vars": "off",
+    "no-undef": "off",
     // ESLINT RULES
     // https://eslint.org/docs/rules/
     "no-useless-catch": "warn",

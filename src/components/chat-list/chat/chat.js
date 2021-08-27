@@ -48,9 +48,14 @@ function ChatView({ title, selected, handleListItemClick }) {
           <AccountCircle fontSize="large" className={styles.icon} />
         </ListItemIcon>
         <div className={styles.description}>
-          <ListItemText className={styles.text} primary={title} />
+          <ListItemText
+            className={styles.text}
+            primary={title}
+            data-testid="title"
+          />
           {lastMessage && (
             <ListItemText
+              data-testid="description"
               className={styles.text}
               primary={`${lastMessage.author}: ${lastMessage.message}`}
             />

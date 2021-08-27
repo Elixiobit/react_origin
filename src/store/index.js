@@ -18,15 +18,14 @@ const persistConfig = {
   whitelist: ["profile"],
 }
 
-const persistreducer = persistReducer(
-  persistConfig,
-  combineReducers({
-    profile: profileReducer,
-    conversations: conversationsReducer,
-    messages: messagesReducer,
-    gists: gistsReducer,
-  }),
-)
+export const reducer = combineReducers({
+  profile: profileReducer,
+  conversations: conversationsReducer,
+  messages: messagesReducer,
+  gists: gistsReducer,
+})
+
+export const persistreducer = persistReducer(persistConfig, reducer)
 
 export const store = createStore(
   persistreducer,

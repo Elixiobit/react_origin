@@ -38,8 +38,10 @@ export const editMessageThunk =
 
 export const getMessagesFB =
   () =>
-  (dispatch, _, { getMessaagesApi }) => {
-    getMessaagesApi().then((snapshot) => {
+  async (dispatch, _, { getMessaagesApi }) => {
+    try {
+      const snapshot = await getMessaagesApi()
+
       const messages = {}
 
       snapshot.forEach((snap) => {
@@ -47,5 +49,7 @@ export const getMessagesFB =
       })
 
       dispatch({ type: GET_MESSAGES, payload: messages })
-    })
+    } catch (e) {
+      console.log("error")
+    }
   }
