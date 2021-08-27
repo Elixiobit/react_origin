@@ -1,13 +1,15 @@
 import debounce from "lodash.debounce"
-import { db } from "../../api/firebase"
 import { handleChangeMessageValue } from "./actions"
 import { GET_CONVERSATIONS } from "./types"
 
-export const getConversationsFB = () => (dispatch) => {
-  // @TODO сделать проверку на ошибку START/SUCCESS/ERROR статусы
-  db.ref("conversations")
-    .get()
-    .then((snapshot) => {
+// getConversationsApi,
+// handleChangeMessageApi,
+
+export const getConversationsFB =
+  () =>
+  (dispatch, _, { getConversationsApi }) => {
+    // @TODO сделать проверку на ошибку START/SUCCESS/ERROR статусы
+    getConversationsApi().then((snapshot) => {
       const conversations = []
 
       snapshot.forEach((snap) => {
@@ -16,18 +18,17 @@ export const getConversationsFB = () => (dispatch) => {
 
       dispatch({ type: GET_CONVERSATIONS, payload: conversations })
     })
-}
+  }
 
-const cb = debounce(async ({ messageValue, roomId }) => {
+const cb = debounce(async (handleChangeMessage) => {
   // @TODO сделать проверку на ошибку START/SUCCESS/ERROR статусы
-  db.ref("conversations")
-    .child(roomId)
-    .update({ title: roomId, value: messageValue })
+  await handleChangeMessage()
 }, 500)
 
 export const handleChangeMessageValueFB =
-  (messageValue, roomId) => async (dispatch) => {
-    await cb({ messageValue, roomId })
+  (messageValue, roomId) =>
+  async (dispatch, _, { handleChangeMessageApi }) => {
+    await cb(() => handleChangeMessageApi(roomId, messageValue))
 
     dispatch(handleChangeMessageValue(messageValue, roomId))
   }
